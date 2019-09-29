@@ -224,17 +224,17 @@ handle_event(_EventType, {tcp_closed, S}, _State, State = #state{id = Id}) ->
 handle_event(_EventType, _Content, _StateName, State) ->
     {next_state, flush, State}.
 
-%% @private
-%% @doc
-%% @end
-terminate(Reason, _StateName, #state{sock = Sock, buffer = Buffs}) when Sock =/= undefined ->
+% %% @private
+% %% @doc
+% %% @end
+terminate(Reason, _StateName, #state{sock = Sock, buffer = Buffs} = St) when Sock =/= undefined ->
     ?ERR_LOG("VANISHED BUFFERS!: ~B byte", [byte_size(Buffs)]),
-    ?ERR_LOG("terminated: ~p", [Reason]),
+    ?ERR_LOG("terminated: ~p", [St]),
     safe_close_sock(Sock),
-    ok;
-terminate(Reason, _StateName, _State) ->
-    ?ERR_LOG("terminated: ~p", [Reason]),
     ok.
+% terminate(Reason, _StateName, _State) ->
+%     ?ERR_LOG("terminated: ~p", [Reason]),
+%     ok.
 
 %% @private
 %% @doc
